@@ -434,7 +434,7 @@ head:
   - [-1, 3, C2f, [512]] # 18 (P4/16-medium)       #1x128x40x40
 
   - [-1, 1, Conv, [512, 3, 2]]                     #1x128x20x20
-  - [[-1, 10], 1, Concat, [1]] # cat head P5        #1x384x20x20
+  - [[-1, 9], 1, Concat, [1]] # cat head P5        #1x384x20x20
   - [-1, 3, C2f, [1024]] # 21 (P5/32-large)       #1x256x20x20
 
   - [[15, 18, 21], 1, Detect, [nc]] # Detect(P3, P4, P5)
