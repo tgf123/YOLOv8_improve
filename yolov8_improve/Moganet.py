@@ -280,7 +280,7 @@ head:
   - [[-1, 9], 1, Concat, [1]] # cat head P5        #1x384x20x20
   - [-1, 3, C2f, [1024]] # 21 (P5/32-large)       #1x256x20x20
 
-  - [[15, 18, 21], 1, Detect, [nc]] # Detect(P3, P4, P5)
+  - [[16, 19, 22], 1, Detect, [nc]] # Detect(P3, P4, P5)
 
 elif m is ChannelAggregationFFN:
 args = [ch[f], c2]
@@ -333,7 +333,7 @@ head:
   - [[-1, 9], 1, Concat, [1]] # cat head P5        #1x384x20x20
   - [-1, 3, C2f, [1024]] # 21 (P5/32-large)       #1x256x20x20
 
-  - [[15, 18, 21], 1, Detect, [nc]] # Detect(P3, P4, P5)
+  - [[16, 19, 22], 1, Detect, [nc]] # Detect(P3, P4, P5)
 
 elif m is MultiOrderGatedAggregation:
 args = [ch[f]]
