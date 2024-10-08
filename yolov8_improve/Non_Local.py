@@ -137,5 +137,5 @@ head:
   - [[-1, 10], 1, Concat, [1]] # cat head P5        #1x384x20x20
   - [-1, 3, C2f, [1024]] # 21 (P5/32-large)       #1x256x20x20
 
-  - [[16, 17, 18], 1, Detect, [nc]] # Detect(P3, P4, P5)
+  - [[16, 19, 22], 1, Detect, [nc]] # Detect(P3, P4, P5)
 
