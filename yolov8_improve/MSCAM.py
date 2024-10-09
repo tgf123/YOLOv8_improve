@@ -347,3 +347,6 @@ if __name__ =='__main__':
 #   - [-1, 3, C2f, [1024]] # 21 (P5/32-large)       #1x256x20x20
 #
 #   - [[16, 19, 22], 1, Detect, [nc]] # Detect(P3, P4, P5)
+
+# elif m is EMCAD_block:
+#     args = [ch[f]]
