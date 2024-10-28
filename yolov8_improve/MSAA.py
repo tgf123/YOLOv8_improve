@@ -95,6 +95,15 @@ class MSAA(nn.Module):
         return x_out  # 返回输出特征
 
 
+if __name__ =='__main__':
+    MSAA =MSAA(256,256)
+    #创建一个输入张量，形状为(batch_size, H*W,C)
+    batch_size = 8
+    input_tensor=torch.randn(batch_size, 256, 64, 64 )
+    #运行模型并打印输入和输出的形状
+    output_tensor =MSAA(input_tensor)
+    print("Input shape:",input_tensor.shape)
+    print("0utput shape:",output_tensor.shape)
 
 # elif m is MSAA:
 #     args = [ch[f], ch[f]]
