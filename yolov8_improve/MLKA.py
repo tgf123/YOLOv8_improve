@@ -98,7 +98,7 @@ class MLKA_Ablation(nn.Module):
         # 分别对a_1和a_2进行多尺度大核注意力操作，结合不同卷积结果
         a = torch.cat([self.LKA7(a_1) * self.X7(a_1), self.LKA5(a_2) * self.X5(a_2)], dim=1)
 
-        # 最后一步将加权后的x和a做卷积变换，并进行跳跃连接
+        # 最后一步将加权后的x和a做卷积变换，将多尺度信息融入到特征图中并进行跳跃连接
         x = self.proj_last(x * a) * self.scale + shortcut
 
         return x
