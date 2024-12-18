@@ -44,7 +44,8 @@ class FeatureRefinementModule(nn.Module):
         self.norm2 = LayerNorm(in_dim, eps=1e-6, data_format="channels_first")  # 用于高频特征的归一化
         self.act = nn.GELU()  # 激活函数
 
-        # 下采样层，用于减少特征图的尺寸
+        # 下采样层，用于减少特征图的尺寸 低频特征通常代表图像中的平滑或全局信息，它们可以通过对输入特征进行下采样、滤波和归一化等操作来提取
+        
         self.down = nn.Conv2d(in_dim, in_dim, kernel_size=down_kernel, stride=down_stride, padding=down_kernel // 2,
                               groups=in_dim)
         self.proj = nn.Conv2d(in_dim * 2, out_dim, kernel_size=1, stride=1, padding=0)  # 投影层，用于合并低频和高频特征
@@ -64,9 +65,11 @@ class FeatureRefinementModule(nn.Module):
 
     def forward(self, x):
         B, C, H, W = x.shape
-
+        #首先对输入特征进行下采样（通过卷积操作）。下采样减少了特征图的空间分辨率，保留了图像的粗略结构，这有助于捕捉低频信息。
         dx = self.down(x)  # 下采样特征
+        #将下采样的特征图恢复到原始尺寸，近似地保留了原图的低频信息。
         udx = F.interpolate(dx, size=(H, W), mode='bilinear', align_corners=False)  # 恢复特征图尺寸
+        #利用低频特征（udx）与输入特征（x）的乘积进行卷积，进一步提取低频信息。norm1和act操作帮助稳定训练并增强非线性特征。
         lx = self.norm1(self.lconv(self.act(x * udx)))  # 低频特征细化
         hx = self.norm2(self.hconv(self.act(x - udx)))  # 高频特征细化
 
