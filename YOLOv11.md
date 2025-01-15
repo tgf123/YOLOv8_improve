@@ -1,6 +1,7 @@
 YOLOv11改进加QQ好友附上支付截图加群：3671595590,CSDN上购买过了可直接加群。这里支付更便宜！！！！！！！
 
-![image](https://github.com/tgf123/YOLOv8_improve/blob/master/papy.jpg)
+
+<img src="https://github.com/tgf123/YOLOv8_improve/blob/master/papy.jpg" width="210px">
 
 ​
 本专栏为YOLOv11模型的魔改专栏，其中包含最新最有效的前沿论文的复现，我们将其中最有效的模块经过与C3K2 C2PSA Backbone head等相结合，对YOLOv11模型有效涨点。本专栏现在是免费开放，欢迎大家来订阅。
