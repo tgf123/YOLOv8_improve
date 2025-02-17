@@ -1,12 +1,13 @@
 YOLOv11改进加QQ好友附上支付截图加群：3671595590,CSDN上购买过了可直接加群。这里支付更便宜！！！！！！！
 
 
-<img src="https://github.com/tgf123/YOLOv8_improve/blob/master/papy.jpg" width="210px">
+<img src="https://github.com/tgf123/YOLOv8_improve/blob/master/v11papy.jpg" width="210px">
 
 整个改进目录：​https://blog.csdn.net/qq_64693987/article/details/142927818
 
 本专栏为YOLOv11模型的魔改专栏，其中包含最新最有效的前沿论文的复现，我们将其中最有效的模块经过与C3K2 C2PSA Backbone head等相结合，对YOLOv11模型有效涨点。本专栏现在是免费开放，欢迎大家来订阅。
 
+​
 3. YOLOv11改进有效系列目录(持续更新)
 卷积篇
 YOLOv11模型改进-卷积-引入Haar小波下采样Down_wt卷积-CSDN博客
@@ -28,6 +29,10 @@ YOLOv11模型改进-模块-引入轻量级深度神经网络的卷积核DualConv
 YOLO11改进-模块-引入通道混洗的重参数化卷积（RCS）_rcs模块-CSDN博客
 
 YOLO11改进-模块-引入多分支卷积InceptionDepthwiseConvolution(IDC) 解决多尺度、小目标-CSDN博客 YOLO11改进-模块-引入基于卷积调制ConvMod 提高小目标检测精度-CSDN博客
+
+YOLO11改进-模块-引入动态特征融合模块DFF 增强特征融合-CSDN博客
+
+YOLO11改进-模块-引入可学习局部显著核模块（Learnable Local Saliency Kernel Module） 增加局部特征-CSDN博客
 
 注意力篇 
 YOLO11改进-模块-引入矩形自校准模块Rectangular Self-Calibration Module(RCM)-CSDN博客
@@ -71,7 +76,9 @@ YOLO11改进-模块-引入曼哈顿自注意力机制Manhattan Self - Attention_
 
 YOLO11改进-模块-引入稀疏自注意力机制Sparse Self - Attention-CSDN博客
 
- 
+YOLO11改进-模块-引入曼哈顿自注意力机制Manhattan Self - Attention-CSDN博客
+
+YOLO11改进-模块-引入基于局部重要性的注意力机制Local Importance-based Attention LIA-CSDN博客
 
 模块
 YOLOv11模型改进-注意力-引入傅里叶+Transformer模块FSAS 增强频域特征_对q, k进行局部分块 (patch-wise),方便后续进行局部fft-CSDN博客
@@ -97,7 +104,11 @@ YOLO11改进-模块-引入添加自适应特征增强（AFE）模块 提高复�
 
 YOLO11改进-模块-引入动态特征融合模块DFF 增强特征融合_yolo加入transformer 的特征融合-CSDN博客
 
-YOLO11改进-模块-引入可学习局部显著核模块（Learnable Local Saliency Kernel Module） 增加局部特征-CSDN博客 
+YOLO11改进-模块-引入可学习局部显著核模块（Learnable Local Saliency Kernel Module） 增加局部特征-CSDN博客
+
+YOLO11改进-模块-引入风车状卷积模块pinwheel-shaped convolutional module_风车卷积-CSDN博客 YOLO11改进-模块-引入受波叠加模块 Wave-pooling-CSDN博客
+
+ YOLO11改进-模块-引入增强层间特征相关性（EFC）模块-CSDN博客
 
 LOSS 
 YOLO11改进-LOSS计算-引入 添加自适应阈值焦点损失（ATFL）函数 解决类别不平衡_atfl损失函数-CSDN博客
@@ -111,6 +122,9 @@ YOLO11改进-模块-引入添加自适应特征增强（AFE）模块 提高复�
 
 YOLOv11模型改进-卷积-引入Haar小波下采样Down_wt卷积_dwtforward-CSDN博客
 
-YOLO11改进-模块-引入小波卷积WaveletConv 增加频域信息-CSDN博客 
+YOLO11改进-模块-引入小波卷积WaveletConv 增加频域信息-CSDN博客
 
+YOLO11改进-模块-引入融合傅里叶卷积混合器 Fused Fourier Convolution Mixer-CSDN博客
+
+​
 ​
