@@ -539,13 +539,13 @@ if __name__ == "__main__":
 #   # [from, repeats, module, args]
 #   - [-1, 1, Conv, [64, 3, 2]] # 0-P1/2
 #   - [-1, 1, Conv, [128, 3, 2]] # 1-P2/4
-#   - [-1, 3, C2f_WaveletConv, [128, True]]
+#   - [-1, 3, C2f_LWN, [128, True]]
 #   - [-1, 1, Conv, [256, 3, 2]] # 3-P3/8
-#   - [-1, 6, C2f_WaveletConv, [256, True]]
+#   - [-1, 6, C2f_LWN, [256, True]]
 #   - [-1, 1, Conv, [512, 3, 2]] # 5-P4/16
-#   - [-1, 6, C2f_WaveletConv, [512, True]]
+#   - [-1, 6, C2f_LWN, [512, True]]
 #   - [-1, 1, Conv, [1024, 3, 2]] # 7-P5/32
-#   - [-1, 3, C2f_WaveletConv, [1024, True]]
+#   - [-1, 3, C2f_LWN, [1024, True]]
 #   - [-1, 1, SPPF, [1024, 5]] # 9
 #
 # # YOLOv8.0n head
