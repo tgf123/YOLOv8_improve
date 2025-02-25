@@ -6,77 +6,84 @@ class MixStructureBlock(nn.Module):
     def __init__(self, dim):
         super().__init__()
 
+        # 批量归一化层 (用于规范化激活值)
         self.norm1 = nn.BatchNorm2d(dim)
         self.norm2 = nn.BatchNorm2d(dim)
 
-        self.conv1 = nn.Conv2d(dim, dim, kernel_size=1)
-        self.conv2 = nn.Conv2d(dim, dim, kernel_size=5, padding=2, padding_mode='reflect')
-        # self.conv3_19 = nn.Conv2d(dim, dim, kernel_size=7, padding=9, groups=dim, dilation=3, padding_mode='reflect')
-        # self.conv3_13 = nn.Conv2d(dim, dim, kernel_size=5, padding=6, groups=dim, dilation=3, padding_mode='reflect')
-        # self.conv3_7 = nn.Conv2d(dim, dim, kernel_size=3, padding=3, groups=dim, dilation=3, padding_mode='reflect')
+        # 卷积层 (1x1, 5x5, 7x7, 5x5, 3x3)
+        # 这些卷积层用于提取不同感受野的特征
+        self.conv1 = nn.Conv2d(dim, dim, kernel_size=1)  # 1x1卷积，将输入映射到相同维度
+        self.conv2 = nn.Conv2d(dim, dim, kernel_size=5, padding=2, padding_mode='reflect')  # 5x5卷积，采用反射填充
 
-        self.conv3_19 = nn.Conv2d(dim, dim, kernel_size=7, padding=3, groups=dim, padding_mode='reflect')
-        self.conv3_13 = nn.Conv2d(dim, dim, kernel_size=5, padding=6, groups=dim, dilation=3, padding_mode='reflect')
-        self.conv3_7 = nn.Conv2d(dim, dim, kernel_size=3, padding=3, groups=dim, dilation=3, padding_mode='reflect')
+        # 3个不同的卷积层，具有不同的卷积核大小和扩张操作
+        self.conv3_19 = nn.Conv2d(dim, dim, kernel_size=7, padding=3, groups=dim, padding_mode='reflect')  # 7x7卷积，带有深度可分离卷积
+        self.conv3_13 = nn.Conv2d(dim, dim, kernel_size=5, padding=6, groups=dim, dilation=3, padding_mode='reflect')  # 5x5卷积，带扩张操作
+        self.conv3_7 = nn.Conv2d(dim, dim, kernel_size=3, padding=3, groups=dim, dilation=3, padding_mode='reflect')  # 3x3卷积，带扩张操作
 
-        # Simple Pixel Attention
+        # 简单像素级注意力
         self.Wv = nn.Sequential(
-            nn.Conv2d(dim, dim, 1),
-            nn.Conv2d(dim, dim, kernel_size=3, padding=3 // 2, groups=dim, padding_mode='reflect')
+            nn.Conv2d(dim, dim, 1),  # 1x1卷积
+            nn.Conv2d(dim, dim, kernel_size=3, padding=3 // 2, groups=dim, padding_mode='reflect')  # 3x3卷积
         )
         self.Wg = nn.Sequential(
-            nn.AdaptiveAvgPool2d(1),
-            nn.Conv2d(dim, dim, 1),
-            nn.Sigmoid()
+            nn.AdaptiveAvgPool2d(1),  # 自适应平均池化
+            nn.Conv2d(dim, dim, 1),  # 1x1卷积
+            nn.Sigmoid()  # Sigmoid激活
         )
 
-        # Channel Attention
+        # 通道注意力机制
         self.ca = nn.Sequential(
-            nn.AdaptiveAvgPool2d(1),
-            nn.Conv2d(dim, dim, 1, padding=0, bias=True),
-            nn.GELU(),
-            # nn.ReLU(True),
-            nn.Conv2d(dim, dim, 1, padding=0, bias=True),
-            nn.Sigmoid()
+            nn.AdaptiveAvgPool2d(1),  # 自适应平均池化
+            nn.Conv2d(dim, dim, 1, padding=0, bias=True),  # 1x1卷积
+            nn.GELU(),  # GELU激活函数
+            nn.Conv2d(dim, dim, 1, padding=0, bias=True),  # 1x1卷积
+            nn.Sigmoid()  # Sigmoid激活
         )
 
-        # Pixel Attention
+        # 像素级注意力机制
         self.pa = nn.Sequential(
-            nn.Conv2d(dim, dim // 8, 1, padding=0, bias=True),
-            nn.GELU(),
-            # nn.ReLU(True),
-            nn.Conv2d(dim // 8, 1, 1, padding=0, bias=True),
-            nn.Sigmoid()
+            nn.Conv2d(dim, dim // 8, 1, padding=0, bias=True),  # 1x1卷积
+            nn.GELU(),  # GELU激活函数
+            nn.Conv2d(dim // 8, 1, 1, padding=0, bias=True),  # 1x1卷积
+            nn.Sigmoid()  # Sigmoid激活
         )
 
+        # MLP层，用于将不同的卷积结果进行融合
         self.mlp = nn.Sequential(
-            nn.Conv2d(dim * 3, dim * 4, 1),
-            nn.GELU(),
-            # nn.ReLU(True),
-            nn.Conv2d(dim * 4, dim, 1)
+            nn.Conv2d(dim * 3, dim * 4, 1),  # 1x1卷积，通道数扩展
+            nn.GELU(),  # GELU激活
+            nn.Conv2d(dim * 4, dim, 1)  # 1x1卷积，恢复通道数
         )
+
+        # 另一个MLP层，和上面类似，但输入不同
         self.mlp2 = nn.Sequential(
-            nn.Conv2d(dim * 3, dim * 4, 1),
-            nn.GELU(),
-            # nn.ReLU(True),
-            nn.Conv2d(dim * 4, dim, 1)
+            nn.Conv2d(dim * 3, dim * 4, 1),  # 1x1卷积
+            nn.GELU(),  # GELU激活
+            nn.Conv2d(dim * 4, dim, 1)  # 1x1卷积
         )
 
     def forward(self, x):
-        identity = x
-        x = self.norm1(x)
-        x = self.conv1(x)
-        x = self.conv2(x)
+        identity = x  # 保存输入，以便后续进行残差连接
+        
+        # 第一个卷积块
+        x = self.norm1(x)  # 批量归一化
+        x = self.conv1(x)  # 1x1卷积
+        x = self.conv2(x)  # 5x5卷积
+        # 将3种不同的卷积结果合并在一起
         x = torch.cat([self.conv3_19(x), self.conv3_13(x), self.conv3_7(x)], dim=1)
-        x = self.mlp(x)
-        x = identity + x
+        x = self.mlp(x)  # 通过MLP进行融合
+        x = identity + x  # 残差连接，增强特征
 
-        identity = x
-        x = self.norm2(x)
+        # 第二个卷积块
+        identity = x  # 保存输入，以便后续进行残差连接
+        x = self.norm2(x)  # 批量归一化
+        # 进行注意力机制操作
         x = torch.cat([self.Wv(x) * self.Wg(x), self.ca(x) * x, self.pa(x) * x], dim=1)
-        x = self.mlp2(x)
-        x = identity + x
-        return x
+        x = self.mlp2(x)  # 通过MLP进行融合
+        x = identity + x  # 残差连接，增强特征
+
+        return x  # 返回最终输出
+
 
 def autopad(k, p=None, d=1):  # kernel, padding, dilation
     """Pad to 'same' shape outputs."""
