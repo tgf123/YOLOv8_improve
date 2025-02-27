@@ -2,15 +2,48 @@ import torch
 import torch.nn as nn
 import numbers
 from einops import rearrange  # 用于方便地重排张量的库
-from .conv import Conv
+
+
+
+def autopad(k, p=None, d=1):  # kernel, padding, dilation
+    """Pad to 'same' shape outputs."""
+    if d > 1:
+        k = d * (k - 1) + 1 if isinstance(k, int) else [d * (x - 1) + 1 for x in k]  # actual kernel-size
+    if p is None:
+        p = k // 2 if isinstance(k, int) else [x // 2 for x in k]  # auto-pad
+    return p
+
+
+class Conv(nn.Module):
+    """Standard convolution with args(ch_in, ch_out, kernel, stride, padding, groups, dilation, activation)."""
+
+    default_act = nn.SiLU()  # default activation
+
+    def __init__(self, c1, c2, k=1, s=1, p=None, g=1, d=1, act=True):
+        """Initialize Conv layer with given arguments including activation."""
+        super().__init__()
+        self.conv = nn.Conv2d(c1, c2, k, s, autopad(k, p, d), groups=g, dilation=d, bias=False)
+        self.bn = nn.BatchNorm2d(c2)
+        self.act = self.default_act if act is True else act if isinstance(act, nn.Module) else nn.Identity()
+
+    def forward(self, x):
+        """Apply convolution, batch normalization and activation to input tensor."""
+        return self.act(self.bn(self.conv(x)))
+
+    def forward_fuse(self, x):
+        """Perform transposed convolution of 2D data."""
+        return self.act(self.conv(x))
+
 
 # 将四维张量 (batch_size, channels, height, width) 转换为三维 (batch_size, height*width, channels)
 def to_3d(x):
     return rearrange(x, 'b c h w -> b (h w) c')
 
+
 # 将三维张量 (batch_size, height*width, channels) 转换回四维 (batch_size, channels, height, width)
 def to_4d(x, h, w):
     return rearrange(x, 'b (h w) c -> b c h w', h=h, w=w)
+
 
 # 带有 bias 的 LayerNorm 实现
 class WithBias_LayerNorm(nn.Module):
@@ -34,6 +67,7 @@ class WithBias_LayerNorm(nn.Module):
         # 进行归一化，并通过可训练的 weight 和 bias 调整
         return (x - mu) / torch.sqrt(sigma + 1e-5) * self.weight + self.bias
 
+
 # 不带 bias 的 LayerNorm 实现
 class BiasFree_LayerNorm(nn.Module):
     def __init__(self, normalized_shape):
@@ -54,6 +88,7 @@ class BiasFree_LayerNorm(nn.Module):
         # 进行归一化，并通过可训练的 weight 调整
         return x / torch.sqrt(sigma + 1e-5) * self.weight
 
+
 # LayerNorm 包装类，支持 BiasFree 和 WithBias 两种 LayerNorm 类型
 class LayerNorm(nn.Module):
     def __init__(self, dim, LayerNorm_type):
@@ -67,6 +102,7 @@ class LayerNorm(nn.Module):
     def forward(self, x):
         h, w = x.shape[-2:]  # 获取输入的高度和宽度
         return to_4d(self.body(to_3d(x)), h, w)
+
 
 # FSAS 是核心模块，包含多个卷积操作和傅里叶变换
 class FSAS(nn.Module):
@@ -88,6 +124,17 @@ class FSAS(nn.Module):
 
     # 前向传播
     def forward(self, x):
+        # 记录原始的高度和宽度
+        original_h, original_w = x.shape[-2:]
+
+        # 计算需要填充的高度和宽度
+        pad_h = (self.patch_size - original_h % self.patch_size) % self.patch_size
+        pad_w = (self.patch_size - original_w % self.patch_size) % self.patch_size
+
+        # 对输入进行填充
+        if pad_h > 0 or pad_w > 0:
+            x = nn.functional.pad(x, (0, pad_w, 0, pad_h))
+
         # 使用 1x1 卷积扩展通道 (6倍扩展，用于 Q, K, V)
         hidden = self.to_hidden(x)
 
@@ -121,7 +168,12 @@ class FSAS(nn.Module):
         # 通过 1x1 卷积将维度还原回输入的维度
         output = self.project_out(output)
 
+        # 裁剪回原始的高度和宽度
+        if pad_h > 0 or pad_w > 0:
+            output = output[:, :, :original_h, :original_w]
+
         return output
+
 
 class Bottleneck_FSAS(nn.Module):
     """Standard bottleneck."""
@@ -169,7 +221,7 @@ if __name__ =='__main__':
     stars_Block =FSAS(256)  # 实例化 FSAS 模块，输入维度为256
     # 创建一个输入张量，形状为 (batch_size, C, H, W)
     batch_size = 8
-    input_tensor = torch.randn(batch_size, 256, 64, 64)
+    input_tensor = torch.randn(batch_size, 256, 21, 27)
     # 运行模型并打印输入和输出的形状
     output_tensor = stars_Block(input_tensor)
     print("Input shape:", input_tensor.shape)
@@ -222,4 +274,3 @@ if __name__ =='__main__':
  #   - [-1, 3, C2f, [1024]] # 21 (P5/32-large)       #1x256x20x20
  #
  #   - [[15, 18, 21], 1, Detect, [nc]] # Detect(P3, P4, P5)
-
