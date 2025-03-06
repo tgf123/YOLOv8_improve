@@ -4,11 +4,18 @@ YOLOv11改进加QQ好友附上支付截图加群：3671595590,CSDN上购买过�
 <img src="https://github.com/tgf123/YOLOv8_improve/blob/master/v11_.jpg" width="210px">
 
 整个改进目录：​https://blog.csdn.net/qq_64693987/article/details/142927818
+视频讲解：https://www.bilibili.com/video/BV1Ae9WYjEjB/?spm_id_from=333.1387.homepage.video_card.click
 
 本专栏为YOLOv11模型的魔改专栏，其中包含最新最有效的前沿论文的复现，我们将其中最有效的模块经过与C3K2 C2PSA Backbone head等相结合，对YOLOv11模型有效涨点。本专栏现在是免费开放，欢迎大家来订阅。
 
 ​
 3. YOLOv11改进有效系列目录(持续更新)
+​
+本专栏为YOLOv11模型的魔改专栏，其中包含最新最有效的前沿论文的复现，我们将其中最有效的模块经过与C3K2 C2PSA Backbone head等相结合，对YOLOv11模型有效涨点。本专栏现在是免费开放，欢迎大家来订阅。
+
+视频讲解：YOLOv11模型改进讲解，教您如何修改YOLOv11_哔哩哔哩_bilibili
+
+4. YOLOv11改进有效系列目录(持续更新)
 卷积篇
 YOLOv11模型改进-卷积-引入Haar小波下采样Down_wt卷积-CSDN博客
 
@@ -80,6 +87,11 @@ YOLO11改进-模块-引入曼哈顿自注意力机制Manhattan Self - Attention-
 
 YOLO11改进-模块-引入基于局部重要性的注意力机制Local Importance-based Attention LIA-CSDN博客
 
+YOLO11改进-模块-引入量化脉冲驱动自注意力机制 Q-SDSA 解决量化带来的性能下降-CSDN博客
+YOLO11改进-模块-引入极性感知注意力 Polarity-Aware Attention _yolo11注意力机制-CSDN博客 
+
+YOLO11改进-模块-引入凝聚注意力机制Condensed Attention解决遮挡、小目标问题-CSDN博客 
+
 模块
 YOLOv11模型改进-注意力-引入傅里叶+Transformer模块FSAS 增强频域特征_对q, k进行局部分块 (patch-wise),方便后续进行局部fft-CSDN博客
 YOLO11改进-模块-引入基于部分卷积的前馈网络PCFN_- [-1, 2, c3k2, [256, false, 0.25]]-CSDN博客 YOLO11改进-模块-引入CMUNeXt Block 增强全局信息_cmunext模型-CSDN博客
@@ -108,7 +120,13 @@ YOLO11改进-模块-引入可学习局部显著核模块（Learnable Local Salie
 
 YOLO11改进-模块-引入风车状卷积模块pinwheel-shaped convolutional module_风车卷积-CSDN博客 YOLO11改进-模块-引入受波叠加模块 Wave-pooling-CSDN博客
 
+YOLO11改进-模块-引入混合结构模块Mix Structure Block 提高多尺度、小目标-CSDN博客 
+
  YOLO11改进-模块-引入增强层间特征相关性（EFC）模块-CSDN博客
+
+YOLO11改进-模块-引入双分支特征提取（Twin-Branch Feature Extraction，TBFE）解决小目标问题、遮挡-CSDN博客 YOLO11改进-模块-引入混合池化注意力模块Hybrid Pooling Attentio解决小目标问题、遮挡问题_改进yolo11-CSDN博客
+
+YOLO11改进-模块-引入多尺度小波池化变压器MWPT 通过结合小波变换、多尺度池化以及门控机制等技术解决多尺度、小目标、边缘模糊等问题-CSDN博客 YOLO11改进-模块-引入多尺度边缘增强模块MEEM 提升模型对图像细节的捕捉能力，以实现更精准的显著目标检测。-CSDN博客
 
 LOSS 
 YOLO11改进-LOSS计算-引入 添加自适应阈值焦点损失（ATFL）函数 解决类别不平衡_atfl损失函数-CSDN博客
@@ -124,7 +142,12 @@ YOLOv11模型改进-卷积-引入Haar小波下采样Down_wt卷积_dwtforward-CSD
 
 YOLO11改进-模块-引入小波卷积WaveletConv 增加频域信息-CSDN博客
 
+YOLO11改进-模块-引入多频率多尺度注意力（MFMSA）模块 提高多尺度、小目标_yolo mfsam-CSDN博客 YOLO11改进-模块-引入多域学习MDL（Multi-Domain Learning） 使用频域增强图像特征-CSDN博客
+
 YOLO11改进-模块-引入融合傅里叶卷积混合器 Fused Fourier Convolution Mixer-CSDN博客
 
+YOLO11改进-模块-引入多尺度小波池化变压器MWPT 通过结合小波变换、多尺度池化以及门控机制等技术解决多尺度、小目标、边缘模糊等问题-CSDN博客 
+
+​
 ​
 ​
