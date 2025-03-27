@@ -1,4 +1,5 @@
 YOLOv11改进加QQ好友附上支付截图加群：3671595590,CSDN上购买过了可直接加群。这里支付更便宜！！！！！！！
+qq没有回复，可以直接添加微信 17329949407
 
 
 <img src="https://github.com/tgf123/YOLOv8_improve/blob/master/v11_.jpg" width="210px">
