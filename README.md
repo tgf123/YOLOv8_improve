@@ -6,11 +6,11 @@
 
 ## 📦 项目列表（持续更新中）
 
-- ✅ YOLOv8 改进项目
-- ✅ YOLOv11 改进项目
+- ✅ YOLOv8 改进项目（免费）
+- ✅ YOLOv11 改进项目（79.9¥/~~99.9¥~~）
 - ✅ YOLOv12 改进项目
 - ✅ YOLOv8 双Backbone结构项目
-- ✅ YOLOv11 双Backbone结构项目
+- ✅ YOLOv11 双Backbone结构项目（89.9¥/~~119.9¥~~）
 - ✅ YOLOv12 双Backbone结构项目
 
 ---
@@ -65,13 +65,11 @@
 
 ---
 
-## 📁 项目结构说明
+💬 联系方式与加群方式
+📬 QQ联系：
 
-```bash
-├── yolo-single/               # YOLOv8/v11/v12 改进版源码
-├── yolo-double-backbone/     # YOLO双Backbone项目（8/11/12）
-├── yolo-gradcam/             # YOLO模型可视化模块（Grad-CAM）
-├── cv-attention/             # 常见注意力机制（SE, ECA, CBAM等）
-├── objectdetection-tricks/   # 检测小技巧模块（标签平滑、IoU优化等）
-├── data-augment/             # 离线增强脚本合集
-└── readme_files/             # 教程截图、结构图等辅助文件
+qq:3671595590
+
+微信：17329949407
+
+📌 群文件：模块源码 + 训练数据脚本 + 视频教程
