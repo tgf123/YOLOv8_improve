@@ -1,19 +1,53 @@
-# 这是我的YOLOv8模型的改进项目，预计会有一百多个改进机制
-## 目前有哪些
-  ### 1.第一讲 增加一个小目标检测头： https://www.bilibili.com/video/BV1ErxWeWEAo/?vd_source=8a6043a22d94a87da35299c073140577
-  ### 2.第二讲 增加非局部注意力机制NonLocalBlockND：https://www.bilibili.com/video/BV1Nm4KeJEG4/?vd_source=8a6043a22d94a87da35299c073140577
-  ### 3.第三讲 增加多核感知网络PKINet：https://www.bilibili.com/video/BV1rc4Fe4Eh8/?spm_id_from=333.999.0.0&vd_source=8a6043a22d94a87da35299c073140577
-  ### 4.第四讲 增加阶门控聚合模块Multi-Order Gated Aggregation和通道聚合模块CA block：https://www.bilibili.com/video/BV1ua2EYoEp4/?spm_id_from=333.999.0.0&vd_source=8a6043a22d94a87da35299c073140577
-  ### 5.第五讲 增加StarNet星形卷积StarsBlock：https://www.bilibili.com/video/BV15P2MYKEWv/?spm_id_from=333.999.0.0&vd_source=8a6043a22d94a87da35299c073140577
-  ### 6.第六讲 增加多尺度卷积注意力模块MSCAM：https://www.bilibili.com/video/BV13Y2uYKEhB/?spm_id_from=333.999.0.0&vd_source=8a6043a22d94a87da35299c073140577
-  ### 7.第七讲 增加 一种新颖的注意力机制 Outlook Attention：https://www.bilibili.com/video/BV1iemgY7EWS/?spm_id_from=333.999.0.0&vd_source=8a6043a22d94a87da35299c073140577
-  ### 8.第八讲 增加上下文引导模块 ContextGuided：https://www.bilibili.com/video/BV1oamgYmEMd/?spm_id_from=333.999.0.0&vd_source=8a6043a22d94a87da35299c073140577
-  ### 9.第九讲 添加EMAttention注意力机制 https://www.bilibili.com/video/BV1ZtycYUE1i/?vd_source=8a6043a22d94a87da35299c073140577
-  ### 10.第十讲 添加全维度动态卷积（Omni-dimensional Dynamic Convolution，ODConv）https://www.bilibili.com/video/BV1hyyAY1Ere/?vd_source=8a6043a22d94a87da35299c073140577
-  ### 11.第十一讲 添加自适应阈值焦点损失（ATFL）函数解决类别不平衡 https://www.bilibili.com/video/BV1PfyWYoE7J/?vd_source=8a6043a22d94a87da35299c073140577
-  ### 12.第十二讲 添加Haar小波下采样Down_wt卷积 https://www.bilibili.com/video/BV1sZyWYtEJR/?vd_source=8a6043a22d94a87da35299c073140577
-  ### 13.第十三讲 添加卷积和注意力融合模块（CAFM） 提升小目标和遮挡检测 https://www.bilibili.com/video/BV1kcysYsEdJ/?vd_source=8a6043a22d94a87da35299c073140577
-  
-  
+# 🔍 FD²-YOLO 系列项目合集（YOLOv8 / YOLOv11 / YOLOv12 单/双 Backbone）
 
-    
+本合集收录六个基于 YOLO 系列的创新改进项目，结合空域与频域特征、模块级积木式设计、可变形检测头与多任务兼容，适用于论文投稿、模型部署与创新研究。
+
+---
+
+## 📦 项目目录
+
+| 项目名称 | 类型 | 模型特性 | 状态 |
+|----------|------|----------|------|
+| `YOLOv8` | 改进YOLO | Ultralytics YOLOv8 基础增强 | ✅ 已完成 |
+| `YOLOv11` | 自研结构 | 支持积木式配置组合、轻量化 | ✅ 已完成 |
+| `YOLOv12` | 多任务扩展 | 检测 + 分割 + 姿态 + 旋转框 | ✅ 已完成 |
+| `YOLOv8 双Backbone` | 模型创新 | 空-频域融合 + 多尺度 | ✅ 已完成 |
+| `YOLOv11 双Backbone` | 模型创新 | Hadamard动态融合 + 可变形检测头 | ✅ 已完成 |
+| `YOLOv12 双Backbone` | 模型创新 | 多任务支持 + FD²-YOLO框架 | ✅ 已完成 |
+
+---
+
+## 🚀 模型创新亮点（以 YOLOv11 双Backbone 为例）
+
+### 🧠 空频双Backbone结构
+
+- **空间Backbone：** 保留YOLO主干特征提取能力；
+- **频域Backbone：** 引入小波分解（DWT），增强纹理与边缘特征；
+- **融合方式：** 使用 `DIFF模块` 动态融合两域特征（Hadamard机制 + KxK大核卷积）。
+
+### 🔧 模块级创新（可配置组合）
+
+| 模块名称 | 描述 | 作用 |
+|----------|------|------|
+| `C3K2-LW` | 卷积注意力融合模块 | 替代原始C3模块，提升轻量性与表达力 |
+| `DIFF模块` | 动态融合频空特征 | Hadamard机制引导信息选择 |
+| `DIA-Head` | 可变形检测头 | 提升检测精度与鲁棒性 |
+| `FreqConv` | 频域卷积模块 | 融合高频与低频特征响应 |
+| `FD²-Block` | 多分支频域聚合模块 | 多尺度重构空频特征，适配复杂场景 |
+
+---
+
+## 🧱 模块积木式配置系统
+
+无需修改代码逻辑，仅通过 `*.yaml` 文件即可组合你的自定义模型结构：
+
+```yaml
+backbone:
+  - type: FreqBackbone
+    args: [C3K2_LW, FD2_Block]
+neck:
+  - type: DIFF
+    args: [hadamard=True, kernel_size=5]
+head:
+  - type: Detect
+    args: [DIA=True]
