@@ -13,10 +13,10 @@
 
 - ✅ YOLOv8 改进项目（免费）
 - ✅ YOLOv11 改进项目（79.9¥/~~109.9¥~~）
-- ✅ YOLOv12 改进项目
-- ✅ YOLOv8 双Backbone结构项目
+- ✅ YOLOv12 改进项目（马上上线）
+- ✅ YOLOv8 双Backbone结构项目（马上上线）
 - ✅ YOLOv11 双Backbone结构项目（89.9¥/~~149.9¥~~）
-- ✅ YOLOv12 双Backbone结构项目
+- ✅ YOLOv12 双Backbone结构项目（马上上线）
 
 ---
 
