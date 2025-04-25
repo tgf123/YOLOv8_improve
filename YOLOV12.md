@@ -6,7 +6,7 @@ YOLOv12改进加QQ好友附上支付截图加群：3671595590,qq没有回复，�
 整个改进目录：https://blog.csdn.net/qq_64693987/article/details/147497370
 视频讲解：https://www.bilibili.com/video/BV17GPteVEzo?spm_id_from=333.788.videopod.sections&vd_source=8a6043a22d94a87da35299c073140577
 
-本专栏为YOLOv11模型的魔改专栏，其中包含最新最有效的前沿论文的复现，我们将其中最有效的模块经过与C3K2 C2PSA Backbone head等相结合，对YOLOv11模型有效涨点。本专栏现在是免费开放，欢迎大家来订阅。
+本专栏为YOLOv12模型的魔改专栏，其中包含最新最有效的前沿论文的复现，我们将其中最有效的模块经过与C3K2 A2C2f Backbone head等相结合，对YOLOv12模型有效涨点。欢迎大家来订阅。
 
 ​
 改进模块分类导航（持续更新）
