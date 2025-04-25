@@ -7,7 +7,7 @@ qq没有回复，可以直接添加微信 17329949407
 整个改进目录：​https://blog.csdn.net/qq_64693987/article/details/142927818
 视频讲解：https://www.bilibili.com/video/BV1Ae9WYjEjB/?spm_id_from=333.1387.homepage.video_card.click
 
-本专栏为YOLOv11模型的魔改专栏，其中包含最新最有效的前沿论文的复现，我们将其中最有效的模块经过与C3K2 C2PSA Backbone head等相结合，对YOLOv11模型有效涨点。本专栏现在是免费开放，欢迎大家来订阅。
+本专栏为YOLOv11模型的魔改专栏，其中包含最新最有效的前沿论文的复现，我们将其中最有效的模块经过与C3K2 C2PSA Backbone head等相结合，对YOLOv11模型有效涨点。
 
 ​
 3. YOLOv11改进有效系列目录(持续更新)
