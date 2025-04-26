@@ -1,7 +1,7 @@
 YOLOv12改进加QQ好友附上支付截图加群：3671595590,qq没有回复，可以直接添加微信 17329949407
 
 
-<img src="https://github.com/tgf123/YOLOv8_improve/blob/master/18a97ac56dd3826835e3e8a1ad4b17f.jpg" width="210px">
+<img src="https://github.com/tgf123/YOLOv8_improve/blob/master/11.jpg" width="210px">
 
 整个改进目录：https://blog.csdn.net/qq_64693987/article/details/147497370
 视频讲解：https://www.bilibili.com/video/BV17GPteVEzo?spm_id_from=333.788.videopod.sections&vd_source=8a6043a22d94a87da35299c073140577
@@ -10,6 +10,7 @@ YOLOv12改进加QQ好友附上支付截图加群：3671595590,qq没有回复，�
 
 ​
 改进模块分类导航（持续更新）
+
 1️⃣ Backbone结构优化
 使用自适应稀疏自注意力ASSA修改Backbone部分，减少噪声，增强Backbone遮挡、小目标特征
 
