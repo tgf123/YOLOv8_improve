@@ -45,6 +45,7 @@
 如果购买11改进后，可以优惠20元，反之亦然。
 ---
 <img src="https://github.com/tgf123/YOLOv8_improve/blob/master/11_doublebackbone.jpg" width="210px">
+<img src="https://github.com/tgf123/YOLOv8_improve/blob/master/f46e07e92da70ade6f3e917a6cc74a2.jpg" width="210px">
 
 ## 📚 延伸推荐
 
