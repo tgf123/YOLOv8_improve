@@ -14,9 +14,9 @@
 - ✅ YOLOv8 改进项目（免费） [查看项目](https://github.com/tgf123/YOLOv8_improve/tree/master/yolov8_improve)
 - ✅ YOLOv11 改进项目（79.9¥/~~109.9¥~~） [查看项目](https://github.com/tgf123/YOLOv8_improve/blob/master/YOLOv11.md)
 - ✅ YOLOv12 改进项目（79.9¥/~~119.9¥~~） [查看项目](https://github.com/tgf123/YOLOv8_improve/blob/master/YOLOV12.md)
-- ✅ YOLOv8 双Backbone结构项目（马上上线） [查看项目]()
+- ✅ YOLOv8 双Backbone结构项目（79.9¥） [查看项目]()
 - ✅ YOLOv11 双Backbone结构项目（89.9¥/~~149.9¥~~） [查看项目](https://github.com/tgf123/YOLOv8_improve/blob/master/YOLOv11_double_backbone.md)
-- ✅ YOLOv12 双Backbone结构项目（79.9¥/~~159.9¥~~） [查看项目]()
+- ✅ YOLOv12 双Backbone结构项目（79.9¥/~~159.9¥~~） [查看项目](https://github.com/tgf123/YOLOv8_improve/blob/master/YOLO12%E5%8F%8Cbackbone.md)
 
 ---
 
