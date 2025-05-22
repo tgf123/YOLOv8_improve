@@ -1,4 +1,5 @@
 YOLOv12改进加QQ好友附上支付截图加群：3671595590,qq没有回复，可以直接添加微信 17329949407
+YOLO12双backbone：https://github.com/tgf123/YOLOv8_improve/blob/master/YOLO12%E5%8F%8Cbackbone.md
 
 
 <img src="https://github.com/tgf123/YOLOv8_improve/blob/master/11.jpg" width="210px">
