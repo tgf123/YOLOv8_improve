@@ -17,6 +17,7 @@
 - ✅ YOLOv8 双Backbone结构项目（79.9¥） [查看项目](https://github.com/tgf123/YOLOv8_improve/blob/master/YOLOv8%E5%8F%8Cbackbone)
 - ✅ YOLOv11 双Backbone结构项目（89.9¥/~~149.9¥~~） [查看项目](https://github.com/tgf123/YOLOv8_improve/blob/master/YOLOv11_double_backbone.md)
 - ✅ YOLOv12 双Backbone结构项目（79.9¥/~~159.9¥~~） [查看项目](https://github.com/tgf123/YOLOv8_improve/blob/master/YOLO12%E5%8F%8Cbackbone.md)
+- ✅ YOLO论文创新点，助你一个月轻松发论文[查看项目](https://github.com/tgf123/YOLOv8_improve/blob/master/%E5%BF%AB%E9%80%9F%E5%8F%91%E8%AE%BA%E6%96%87.md)
 
 ---
 
