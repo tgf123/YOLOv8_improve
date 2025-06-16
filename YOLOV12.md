@@ -2,7 +2,7 @@ YOLOv12改进加QQ好友附上支付截图加群：3671595590,qq没有回复，�
 YOLO12双backbone：https://github.com/tgf123/YOLOv8_improve/blob/master/YOLO12%E5%8F%8Cbackbone.md
 
 
-<img src="https://github.com/tgf123/YOLOv8_improve/blob/master/11.jpg" width="210px">
+<img src="https://github.com/tgf123/YOLOv8_improve/blob/master/79.9.jpg" width="210px">
 
 整个改进目录：https://blog.csdn.net/qq_64693987/article/details/147497370
 
