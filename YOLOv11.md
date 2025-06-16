@@ -3,7 +3,7 @@ qq没有回复，可以直接添加微信 17329949407
 
 YOLOv11双backbone(持续更新)：https://github.com/tgf123/YOLOv8_improve/blob/master/YOLOv11_double_backbone.md
 
-<img src="https://github.com/tgf123/YOLOv8_improve/blob/master/11.jpg" width="210px">
+<img src="https://github.com/tgf123/YOLOv8_improve/blob/master/79.9.jpg" width="210px">
 
 整个改进目录：​https://blog.csdn.net/qq_64693987/article/details/142927818
 视频讲解：https://www.bilibili.com/video/BV1Ae9WYjEjB/?spm_id_from=333.1387.homepage.video_card.click
