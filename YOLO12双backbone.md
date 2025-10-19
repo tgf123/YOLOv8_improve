@@ -43,7 +43,6 @@ https://github.com/tgf123/YOLOv8_improve/blob/master/YOLOV12.md
 
 **原价：159.9¥**  
 **限时优惠： 89.9¥ ✅**
-如果购买12改进后，可以优惠20元，反之亦然。
 ---
 <img src="https://github.com/tgf123/YOLOv8_improve/blob/master/double_89.9.jpg" width="210px">
 
