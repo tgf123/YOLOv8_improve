@@ -19,7 +19,7 @@
 - ✅ YOLOv11 双Backbone结构项目（89.9¥/~~149.9¥~~） [查看项目](https://github.com/tgf123/YOLOv8_improve/blob/master/YOLOv11_double_backbone.md)
 - ✅ YOLOv12 双Backbone结构项目（89.9¥/~~159.9¥~~） [查看项目](https://github.com/tgf123/YOLOv8_improve/blob/master/YOLO12%E5%8F%8Cbackbone.md)
 - ✅ YOLOv26 双Backbone结构项目（89.9¥/~~159.9¥~~） [查看项目](https://github.com/tgf123/YOLOv8_improve/blob/master/YOLO26%E5%8F%8Cbackbone.md)
-- ✅ 双模态改进项目（199.9¥/~~259.9¥~~） [查看项目](https://github.com/tgf123/YOLOv8_improve/blob/master/YOLO26%E5%8F%8Cbackbone.md)
+- ✅ 双模态改进项目（199.9¥/~~259.9¥~~） [查看项目])
 - ✅ YOLO论文创新点，助你一个月轻松发论文 [查看项目](https://github.com/tgf123/YOLOv8_improve/blob/master/%E5%BF%AB%E9%80%9F%E5%8F%91%E8%AE%BA%E6%96%87.md)
 
 ---
@@ -111,18 +111,6 @@
 
 - 当前价格基于现有内容，后续更新将逐步涨价（早买更划算）  
 - 提供YOLO相关可编辑图 + 写作支持资料  
-
----
-
-## 🔬 实验对比（摘选）
-
-| 模型                   | Params (M) | FLOPs (G) | mAP@0.5 | mAP@0.5:0.95 |
-|------------------------|------------|-----------|---------|----------------|
-| YOLOv8                 | 3.2       | 28.4      | 51.2    | 34.8           |
-| YOLOv11                | 2.6       | 26.1      | 52.6    | 36.1           |
-| YOLOv11 + 双Backbone   | 3.4       | 28.3      | **54.8** | **37.9**       |
-
-> ✅ 频域增强 + 多分支融合结构在小目标与复杂背景下提升明显  
 
 ---
 
