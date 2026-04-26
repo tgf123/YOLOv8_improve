@@ -44,7 +44,7 @@
 
 ## 🧱 Ultralytics-YOLO 改进项目
 
-基于Ultralytics官方框架深度整合，统一支持 YOLOv11 /YOLOv12 / YOLOv26 等多个版本。
+基于Ultralytics官方框架深度整合，统一支持 YOLOv11 /YOLOv12 / YOLOv26多个版本。
 
 - 一套代码支持多版本YOLO横向对比实验  
 - 模块高度解耦，支持“搭积木式”快速创新  
