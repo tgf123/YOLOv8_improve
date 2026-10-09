@@ -95,6 +95,21 @@
 
 ---
 
+## 🧱 DEIM 改进项目（yaml驱动 / 双Backbone / 双模态 / OV-DEIM）
+
+基于 CVPR2025-DEIM 进行系统化结构优化，提供完整可运行代码与改进模块配置文件，覆盖单模态、双主干、双模态与开放词汇全场景。
+
+- **全模块 yaml 化、即插即用**：换模块 = 改一两行配置，无需动源码
+- 内置 **200+ 主流改进方向**（注意力 / 自注意力 / 特征融合 / 轻量化 / 频域 / Mamba 等 16 大类）
+- 支持检测、实例分割、旋转目标检测多任务扩展
+- **12 套 yaml 配置体系**：HGNetv2 / Lite / DINOv3 多骨架一键切换（n / s / m / l / x）
+- **双Backbone / 双模态**：RGB + 红外（IR）多模态输入，多种融合策略（Early / Mid / Late Fusion，3 套融合结构），12 个双流 yaml，stage1 → EMA restart → stage2 两阶段训练
+- **OV-DEIM 开放词汇**：基于 YOLO 格式开放词汇实现（HGNetv2 + HybridEncoder + OVDEIMTransformer），接入 MobileCLIP 等文本编码器，打破固定类别限制
+- 通用训练循环 + `--check` 构建自检 / `--check-nan` NaN 巡检，改完即验
+
+👉 适合：论文创新 / 消融实验 / 拉指标 / 结构创新 / 开放词汇检测论文  
+
+
 ## 🧱 项目亮点
 
 - ✅ **模块化创新**：所有改进点均已封装为独立模块，通过修改 YAML 配置文件即可组合创新  
