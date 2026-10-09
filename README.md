@@ -79,7 +79,7 @@
 面向复杂环境（夜间、火灾、低光照等）设计的多模态目标检测方案。
 
 支持模型：
-- YOLOv8 / YOLOv11 / YOLOv12 / YOLOv26 全系列双模态版本，RTDETR双模态 
+- YOLOv8 / YOLOv11 / YOLOv12 / YOLOv26 全系列双模态版本，RTDETR双模态 ，DEIM双模态，OVDEIM
 
 核心能力：
 - 支持 RGB + 红外（IR）/ 热成像等多模态输入  
