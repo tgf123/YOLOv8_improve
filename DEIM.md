@@ -1,14 +1,206 @@
-# RT-DETR/DEIM 模型改进模块库指南
+# DEIM改进框架项目介绍
 
-## 一、项目介绍
-本模块库收集了 **206个 可插拔深度学习模块**，专门面向 RT-DETRv4、RT-DETRv4、DEIM、DEIMv2、DFINE等目标检测模型的迭代优化需求，覆盖自注意力增强、卷积优化、特征融合、频域处理、骨干网络等12个核心技术方向。所有模块均经过适配，可直接替换原模型对应组件，针对**小目标检测差、遮挡漏检、低质图像性能下降、多尺度目标适配难**等痛点场景优化，帮助开发者快速完成模型选型与改进。
 
-本专栏为RT-DETRv4、RT-DETRv4、DEIM、DEIMv2、DFINE模型的魔改专栏，其中包含最新最有效的前沿论文的复现和独家自研模块，一直更新。
+## 1. 项目定位与背景
+
+目标检测领域近年来出现明显的"方法论分水岭"：
+
+- **YOLO 红利见顶**：YOLO 系列上手门槛极低，无论是否是计算机专业都能快速跑通，导致学术灌水严重、审稿人视觉疲劳，越来越多导师在组会中明确**禁用 YOLO** 作为毕业/投稿模型。
+- **端到端检测器成为顶会主流**：CVPR2024-RTDETR 把 DETR 系推到实时档；CVPR2025-DEIM、ICLR2025-DFine 进一步把 DETR 系做到 **Nano 级**（最小模型仅 ~10G FLOPs 量级），把训练成本与设备门槛拉到接近 YOLO 的水平，却保留了端到端检测器的结构优势（无需 NMS、稀疏 query、可解释匹配）。
+
+本项目选择 **DEIMv2 系列（DEIM / DFine 同宗）** 作为基座，在其之上做**系统化改进**。项目经历了从"**直接改原始代码**"到"**yaml 配置驱动**"两阶段演进（见 §3），最终沉淀出一套**改一行配置就能换模块**的便捷框架，目标是：
+
+> 让用户既能"改配置即改进"（1–2 天上手实验），也能"读代码做二次创新"（深入模块内部），最终服务于**顶会论文的方法章节与消融实验**。
+
+---
 
 <img src="https://github.com/tgf123/YOLOv8_improve/blob/master/deim.jpg" width="210px">
 ---
 
-## 二、模块分类说明
+
+## 2. 这个项目包含什么模型
+
+源代码基于 **DEIMv2**（Intellindust-AI-Lab，Apache-2.0），在其原生实现之上扩展了三组骨架与多套任务线。框架内可跑以下模型（任务支持情况见下表）：
+
+| 模型 / 任务线 | 主干 | 规模 | 目标检测 | 实例分割 | 旋转目标 | 多模态 |
+| --- | --- | --- | --- | --- | --- | --- |
+| **DEIMv2**（原生） | HGNetv2 + HybridEncoder | n/s/m/l/x | ✅ | ✅ | ✅ | — |
+| **DEIMv2-Lite** | HGNetv2 + LiteEncoder | atto/femto/pico | ✅ | — | — | — |
+| **DEIMv2-DINOv3** | DINOv3-STAs + HybridEncoder | dinov3_s/m/l/x | ✅ | ✅ | ✅ | — |
+| **MM-DEIM（双流）** | 双 HGNetv2（RGB+IR） | n/m/l/x | ✅ | — | — | ✅ RGB+IR |
+| **OV-DEIM（开放词汇）** | HGNetv2（YOLO 格式） | s | ✅（开放类别） | — | — | ✅ 文本引导 |
+
+> 规模谱系从 **Nano（最小，约 12G 显存可训）** 一路覆盖到 **X（大模型）**，既满足低资源快速迭代，也能撑起大模型 SOTA 对比实验。
+
+**为什么值得做**：即便是 2025、2026 甚至更晚，DEIM/DFine 这类端到端检测器在架构上并不落后；而它们自带 Nano 档位，变相降低了训练成本与设备要求（建议 **最低 12G 显存** 起步），比 RTDETRV2 动辄 50G+ FLOPs 的起步门槛友好得多。
+
+---
+
+## 3. 项目演进：从"改源码"到"改配置"（两阶段）
+
+这是本项目最值得讲清楚的一条主线。**前期我们是直接改 DEIM 原始代码做改进，后期才重构成 yaml 配置驱动**——也正因为踩过"改代码"的坑，才更知道"改配置"有多省事。
+
+### 阶段一 · 原始代码改造期（直接改 DEIM 源码）
+
+直接在 DEIM 原生代码库上做加法，三个方向各自手写：
+
+- **DEIM 改进（改源码）**：在 `engine/`、模型定义里直接新增或替换模块，每换一个改进点就要动 Python 文件、手动注册、改模型构建逻辑。
+- **双 backbone DEIM（RGB+IR）**：直接在模型类里手写第二条 backbone 分支（RGB + IR），并手写 forward 的双路特征融合，与训练主循环强耦合。
+- **OV-DEIM（开放词汇）**：直接在 `engine/deim/ov_*.py` 与模型类上实现开放词汇头（归一化点积分类、MAL loss 等），开放词汇逻辑与训练代码纠缠在一起。
+
+> 这一阶段的**痛点**很直观：换一个模块 = 改一堆代码再重新跑通；做消融实验要复制整套代码目录；多人协作极易冲突；对照实验无法规模化、难复现、难版本管理。
+
+### 阶段二 · yaml 驱动改造期（配置优先）
+
+把上面三个方向**统一重构成一份 yaml 平面图驱动**的框架，训练主循环只写一次、通用复用：
+
+- **`DEIM_YOLO`**：把 DEIM 改进搬到 yaml 图驱动（`train_deim_yaml.py` + 平面 yaml 节点表）。
+- **`MM_DEIM`**：把双 backbone 重构成 yaml 描述（RGB+IR 双分支 + 三套融合结构，12 个 yaml）。
+- **`OV_DEIM`**：把开放词汇重构成 YOLO 格式 yaml（HGNetv2 + HybridEncoder + OV 解码头，文本侧复用冻结 MobileCLIP 嵌入）。
+
+改进模块统一抽成 `change_mode_*` 包、配置统一抽成 `deim_improve_*` yaml，由通用分支自动注册。**从"改代码"到"改配置"的跨越，正是本项目便捷性的来源（见 §5）**。
+
+---
+
+## 4. 改进模块体系（yaml 驱动，核心卖点）
+
+这是本项目与"直接用原版 DEIM"最大的区别：**把 200+ 改进模块统一重构为 yaml 即插即用格式**，用户改一行配置就能把某个顶会模块塞进 backbone / neck / 注意力层，无需改任何训练代码。
+
+模块按**数据流顺序**组织为 16 个改进方向（括号内为该方向已落地/收纳的模块文件数）：
+
+| # | 改进方向 | 落点（网络位置） | 已收纳模块数 |
+| --- | --- | --- | --- |
+| 1 | **HG 主干变维** | backbone `HG_Stage` | 2 |
+| 2 | **FPN / fpn_blocks 变维** | neck `fpn_blocks`/`pan_blocks` | 16 |
+| 3 | **lateral 归一化** | neck `lateral_convs` | 5 |
+| 4 | **上采样修复** | neck `upsample_feat` | 5 |
+| 5 | **自注意力机制** | neck `TransformerEncoder` 层（**66** 个） | 66 |
+| 6 | **通用注意力** | neck / 融合块 | 21 |
+| 7 | **卷积注意力** | neck / backbone 注意力注入点 | 17 |
+| 8 | **特征融合** | neck `concat` 节点 | 23 |
+| 9 | **频域处理** | 主干 / neck 频域变换 | 15 |
+| 10 | **Mamba / 状态空间** | neck / encoder | 11 |
+| 11 | **stem 改进** | backbone 输入 stem | 7 |
+| 12 | **下采样改进** | 各 stage 下采样 | 12 |
+| 13 | **注意力参考** | 备选注意力池 | 16 |
+| 14 | **metaformer** | 通用 token mixer | 5 |
+| 15 | **特征预处理** | 特征前处理 | 1 |
+| 16 | **上采样（基础）** | 基础上采样算子 | 4 |
+
+> 合计 **约 二三百个改进模块文件**，覆盖 CVPR / ICLR / ICCV / ECCV / AAAI / TGRS 等近三年顶会与若干自研算子。每个模块都附带**源论文出处与一句话说明**，方便论文中引用与合规标注。
+
+**即插即用机制**：
+- 改进模块统一放在 `DEIM_YOLO/change_mode_*/`；配置统一放在 `DEIM_YOLO/deim_improve_*/` 下对应 yaml。
+- 自注意力类（66 个）由 `train_deim_yaml.py` 的通用分支 `m.startswith('TransformerEncoder_')` **自动导入，无需手写注册**。
+- 改配置即可完成"模块替换、通道对齐、残差保留"，不碰训练主循环。
+
+---
+
+## 5. yaml 改进的便捷性（核心优势）
+
+正因为前期踩过"改源码"的坑，我们把第二阶段的目标定为：**让"做一个改进 / 跑一组消融"的成本从"改一堆代码"降到"改一行配置"**。具体便捷性体现在：
+
+| 维度 | 阶段一：改原始代码 | 阶段二：yaml 配置驱动 |
+| --- | --- | --- |
+| **换一个模块** | 改 Python 文件 + 手动注册 + 调构建逻辑 | 改 yaml 里一个节点名（如 `TransformerEncoder` → `TransformerEncoder_FRFN`） |
+| **模块注册** | 手写注册表，漏写即报错 | 通用分支自动 import，66 个自注意力零手写注册 |
+| **消融实验** | 复制整套代码目录，易混乱 | 只换 yaml 文件，可并行、可版本管理、可复现 |
+| **多档位生成** | 每个档位手搓一份模型 | 生成器一键产出 n/m/l/x 等 12 套配置 |
+| **迭代验证** | 必须上 GPU 才能跑通 | `--check` 在 CPU 沙箱即可构建+前向自检（自动桩缺包），零 GPU 等待 |
+| **协作** | 多人改同一份代码易冲突 | 各自改自己的 yaml，互不干扰 |
+| **上手门槛** | 需读懂整套训练代码 | 1–2 天即可上手"改配置做改进" |
+
+**更进一步的便捷能力**（随框架提供，不另购）：
+- **`--check` 配置可构建性 + 前向自检**：CPU 沙箱即可跑，自动桩掉缺包，改完配置先自检再上 GPU，省排队。
+- **训练健壮性增强**：NaN/Inf 巡检开关（`--check-nan`，命中存快照）、结构打印自检（`print_model_structure_dual`）、`--check-bs` 规避 BN 在 batch=1 假失败等。
+- **批量验证脚本**：双 backbone 多融合变体、全自注意力模块等一键回归。
+
+> 一句话总结：**前期我们为"改代码"付出过成本，后期把这套成本彻底抹平——现在做一个新改进，平均改动就是一两行 yaml。**
+
+---
+
+## 6. 三大子项目（yaml 驱动版）
+
+> 以下三个子项目，都是 §3 阶段二把"原始代码改造"重构后的 **yaml 驱动** 版本。
+
+### 6.1 `DEIM_YOLO`（主框架，yaml 图驱动）
+- 把 DEIM 改造为 **yaml 图驱动**：用一份平面 yaml（`backbone` + `head` 节点表 + 绝对层号）完整描述模型，训练主循环 `train_deim_yaml.py` 负责构建、注册、装配。
+- 12 套 yaml 配置体系，按三组骨架组合：
+  - **HGNetv2 + HybridEncoder**：n / s / m / l / x
+  - **HGNetv2 + LiteEncoder**：atto / femto / pico
+  - **DINOv3-STAs + HybridEncoder**：dinov3_s / m / l / x
+- 自注意力批量重构已完成：16 个 `change_mode_*` 包 → `TransformerEncoderLayer_<X>` 范式（源码内联、无绝对路径依赖、CPU 全量回归）。
+
+### 6.2 `MM_DEIM`（RGB+IR 双流多模态，yaml 驱动）
+- 加载 ImageNet 预训练 **双 HGNetv2 backbone（RGB + IR）**，检测头从头训练；支持 **stage1 → EMA restart → stage2** 两阶段训练。
+- 三套融合结构 + 纯双流共 **12 个 yaml**（n/m/l/x × `dual` / `dual_backbone`(渐进融合) / `dual_backbone1`(P5-concat) / `dual_backbone2`(全 late-fusion)），CPU 验证 12/12 通过。
+- 入口 `MM_train.py`，支持 `--check` 构建自检与结构打印断言。
+
+### 6.3 `OV_DEIM`（开放词汇检测，YOLO 格式实现，yaml 驱动）
+- 把参考的 DETR 风格 OV-DEIM（DINOv3 ViT 主干）改写成 **HGNetv2 + HybridEncoder 的 YOLO 格式**：单 RGB 输入，对齐 KITTI 开放词汇设定。
+- 开放词汇机制**完全复用** `engine/deim/ov_*.py`（归一化点积分类、sigmoid + "none" 背景列、MAL loss），未改动原始 OV 代码路径。
+- 文本侧用**冻结的 MobileCLIP 文本嵌入**（512 维）+ 可训练 `TextAdapter`（512→256）投影到图像空间。
+- 约束：所有 OV 新代码落在 `OV_DEIM/`，不动 `deim_mm` 原始库。
+
+---
+
+## 7. 更新日志（示意时间，自 2026 年 1 月起，两阶段编排）
+
+> 以下日期为排版示意（起始于 2026 年 1 月），真实提交记录以 git 为准；所列能力均为本项目已落地内容。
+
+**阶段一 · 原始代码改造期**
+- **2026-01-08** 初版项目发布：基于 DEIMv2 原生实现，直接改源码完成首批 DEIM 改进模块（在 `engine/` 与模型定义中新增/替换模块、手动注册）。
+- **2026-01-22** 双 backbone DEIM（RGB+IR）：在模型类中手写第二条 backbone 分支与双路特征融合 forward，与训练主循环强耦合。
+- **2026-02-18** OV-DEIM（开放词汇）：直接在 `engine/deim/ov_*.py` 与模型类上实现开放词汇头（归一化点积分类、MAL loss），OV 逻辑与训练代码纠缠。
+
+**阶段二 · yaml 驱动改造期**
+- **2026-03-12** 启动 yaml 驱动重构：把 DEIM 改进搬到 `DEIM_YOLO`（yaml 图驱动 + `train_deim_yaml.py`），训练主循环首次实现"配置优先"。
+- **2026-04-20** 双 backbone 重构为 `MM_DEIM`：生成 n/m/l/x × 3 融合结构 + 纯双流的 12 个 yaml，CPU 验证 12/12 通过；梳理 stage1→EMA restart→stage2 两阶段训练流程。
+- **2026-05-15** `OV_DEIM` 重构为 YOLO 格式 yaml：HGNetv2 + HybridEncoder + OV 解码头，CPU 验证模型可构建、`forward` 形状正确；约束 OV 代码只落在 `OV_DEIM/`。
+- **2026-06-10** 200+ 改进模块 yaml 化：建立 16 个 `change_mode_*` 包与对应 `deim_improve_*` 配置目录；引入 `--check` 构建自检与 CPU 沙箱回归；完成自注意力批量重构（66 模块 → PASS 63 / FAIL 3，3 个为 CUDA-only / 缺 natten，需 GPU 复验）。
+- **2026-07-08** 发布 12 篇博客系列（HG / lateral / upsample / concat / TransformerEncoder / fpn / 卷积注意力 / 通用注意力 / 频域 / Mamba / DoubleDEIM / stem），配套"四段式"模块介绍写作框架。
+- **2026-08-15** 训练健壮性增强：新增 `--check-nan` NaN/Inf 巡检开关（命中存 state_dict 快照）、结构打印断言 `print_model_structure_dual`、修复 fuse 分支 `yaml_rows` 计数偏差、修复 `--check-bs=1` 下 BN 假失败问题。
+- **2026-09-20** 模块持续扩充：新增频域、Mamba、注意力、metaformer 等多方向模块；支持 TIMM 主干训练；补充多套 IOU-Loss（DIoU/CIoU/EIoU/SIoU/ShapeIoU/PIoU）。
+
+---
+
+## 8. 项目使用注意点（避坑）
+
+- **双 backbone 的 YAML 两个致命坑**（已写入生成器并验证）：① `HG_Stage` 的 `downsample/light_block` 必须是**真布尔**（带引号字符串 `'false'` 会被解析成真值，导致错误二次下采样、neck 分辨率减半崩溃）；② `DEIMDecoder` 首参必须是 **`'nc'` 占位符**而非写死字面量（写死 80 会忽略训练配置里的 `num_classes`，导致 loss 维度不匹配）。
+- **fuse 分支计数**：`build_fuse_model` 的 `yaml_rows` 必须包含 `fusion` 段行数，否则 `print_model_structure_dual` 断言会差一行（已修复）。
+- **CUDA-only 模块**：部分 Mamba（`GLSS`/`VMKLA` 的 `selective_scan`）、`deformable_self_attention`（`natten`）在 CPU 下无法验证，需在 GPU 环境复验——写介绍时务必标注 GPU/CPU 兼容性。
+- **OV 约束**：所有 OV 改动只落在 `OV_DEIM/`，不动原始 `engine/deim/ov_*.py` 与 `deim_mm`，保证单一事实来源。
+
+---
+
+## 9. 项目结构速览
+
+```
+DEIMv2-main/
+├── DEIM_YOLO/            # 主框架（yaml 驱动，阶段二）
+│   ├── train_deim_yaml.py        # 训练主循环 + 图构建
+│   ├── change_mode_*/            # 16 类改进模块（~226 文件）
+│   ├── deim_improve_*/           # 对应 yaml 配置
+│   ├── 博客系列/                 # 12 篇方向拆解
+│   ├── 改进介绍写作框架.md        # 四段式写作模板
+│   └── 自注意力模块总览.md        # 66 模块验证状态表
+├── MM_DEIM/              # RGB+IR 双流多模态（12 yaml，yaml 驱动）
+│   ├── MM_train.py
+│   └── deim-improve-*-dual*.yaml
+├── OV_DEIM/              # 开放词汇检测（YOLO 格式，yaml 驱动）
+│   ├── ov_yolo_deim.py / ov_modules.py
+│   └── ov_yolo_deim_s.yml
+├── DEIMv2_YOLO/          # DEIMv2 原生 + DINOv3 线
+├── engine/               # 训练引擎（solver / det_engine / deim / extre_module）
+├── configs/              # 原生配置
+└── OV_train.py           # OV 训练入口
+```
+
+---
+
+
+
+## 模块分类说明
 
 为方便快速匹配改进需求，将所有模块分为以下12类，
 
